@@ -28,22 +28,41 @@ function generateTestSheet() {
         <html>
         <head>
             <style>
-                @page { size: letter; margin: 0; }
+                @page { 
+                    size: letter portrait; 
+                    margin: 0; 
+                }
+                
                 body { 
                     margin: 0; 
                     padding: 0; 
-                    font-family: Arial, sans-serif; 
                     background: white; 
-                    color: black;
                 }
+
                 .sheet-container {
                     width: 215.9mm;
                     height: 279.4mm;
                     position: relative;
                     padding: 15mm;
                     box-sizing: border-box;
+                    background: white;
+                    overflow: hidden;
                 }
                 
+                @media print {
+                    body * {
+                        visibility: hidden;
+                    }
+                    .sheet-container, .sheet-container * {
+                        visibility: visible;
+                    }
+                    .sheet-container {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                    }
+                }
+
                 /* Anchors */
                 .anchor {
                     width: 10mm;
@@ -63,7 +82,6 @@ function generateTestSheet() {
                     left: 25mm;
                     width: 40mm;
                     height: 40mm;
-                    border: 1px solid #eee;
                 }
                 .qr-container img { width: 100%; height: 100%; }
 
@@ -72,6 +90,7 @@ function generateTestSheet() {
                     text-align: center;
                     margin-top: 10mm;
                     margin-bottom: 35mm;
+                    font-family: Arial, sans-serif;
                 }
                 h1 { margin: 0; font-size: 24pt; }
                 p { margin: 5px 0; color: #666; }
