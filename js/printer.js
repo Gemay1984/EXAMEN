@@ -39,24 +39,29 @@ function generateTestSheet() {
                     background: white; 
                 }
 
-                .sheet-container {
+                /* Main Sheet Container */
+                .sheet {
                     width: 215.9mm;
                     height: 279.4mm;
-                    position: relative;
-                    padding: 15mm;
                     box-sizing: border-box;
+                    padding: 10mm;
                     background: white;
+                    position: relative;
                     overflow: hidden;
+                    page-break-inside: avoid;
+                    break-inside: avoid;
+                    page-break-before: avoid;
+                    page-break-after: avoid;
                 }
                 
                 @media print {
                     body * {
                         visibility: hidden;
                     }
-                    .sheet-container, .sheet-container * {
+                    .sheet, .sheet * {
                         visibility: visible;
                     }
-                    .sheet-container {
+                    .sheet {
                         position: absolute;
                         top: 0;
                         left: 0;
@@ -89,54 +94,53 @@ function generateTestSheet() {
                 header {
                     text-align: center;
                     margin-top: 10mm;
-                    margin-bottom: 35mm;
+                    margin-bottom: 25mm;
                     font-family: Arial, sans-serif;
                 }
-                h1 { margin: 0; font-size: 24pt; }
-                p { margin: 5px 0; color: #666; }
+                h1 { margin: 0; font-size: 20pt; }
+                p { margin: 2mm 0; color: #666; font-size: 10pt; }
 
-                /* Response Area */
-                .response-area {
-                    border: 2mm solid black;
-                    padding: 10mm;
-                    margin: 0 auto;
+                /* Questions Container */
+                .questions {
+                    max-height: 200mm;
                     width: 140mm;
+                    margin: 0 auto;
+                    border: 2mm solid black;
+                    padding: 8mm;
+                    overflow: hidden;
                 }
+
                 .question-row {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    margin-bottom: 8mm;
+                    margin-bottom: 5mm;
                 }
                 .q-num {
                     font-weight: bold;
-                    font-size: 14pt;
+                    font-size: 12pt;
                     width: 10mm;
                 }
                 .bubble-container {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    gap: 2mm;
+                    gap: 1mm;
                 }
                 .bubble {
-                    width: 8mm;
-                    height: 8mm;
+                    width: 6mm;
+                    height: 6mm;
                     border: 0.5mm solid black;
                     border-radius: 50%;
                 }
                 .bubble-label {
-                    font-size: 9pt;
+                    font-size: 8pt;
                     font-weight: bold;
-                }
-
-                @media print {
-                    .no-print { display: none; }
                 }
             </style>
         </head>
         <body>
-            <div class="sheet-container">
+            <div class="sheet">
                 <!-- 4 Anchors -->
                 <div class="anchor top-left"></div>
                 <div class="anchor top-right"></div>
@@ -153,7 +157,7 @@ function generateTestSheet() {
                     <p>ZipCastellano v2.1 - Validación de Visión</p>
                 </header>
 
-                <div class="response-area">
+                <div class="questions">
                     ${questionsHtml}
                 </div>
             </div>
