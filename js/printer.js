@@ -33,16 +33,19 @@ function generateTestSheet() {
                     margin: 0; 
                 }
                 
-                body { 
+                html, body { 
                     margin: 0; 
                     padding: 0; 
-                    background: white; 
+                    background: white;
+                    width: 215.9mm;
+                    height: 279.4mm;
+                    overflow: hidden;
                 }
 
                 /* Main Sheet Container */
                 .sheet {
                     width: 215.9mm;
-                    height: 279.4mm;
+                    height: 279.3mm; /* 0.1mm shorter to prevent browser rounding-up page break */
                     box-sizing: border-box;
                     padding: 10mm;
                     background: white;
@@ -53,21 +56,25 @@ function generateTestSheet() {
                     justify-content: flex-start;
                     page-break-inside: avoid;
                     break-inside: avoid;
-                    page-break-before: avoid;
-                    page-break-after: avoid;
                 }
                 
                 @media print {
+                    @page { margin: 0; }
+                    body { margin: 0; }
                     body * {
                         visibility: hidden;
                     }
                     .sheet, .sheet * {
                         visibility: visible;
+                        -webkit-print-color-adjust: exact;
+                        print-color-adjust: exact;
                     }
                     .sheet {
                         position: absolute;
                         top: 0;
                         left: 0;
+                        width: 215.9mm;
+                        height: 279.3mm;
                     }
                 }
 
