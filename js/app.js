@@ -98,9 +98,26 @@ document.addEventListener('DOMContentLoaded', () => {
         resultContainer.style.animation = 'pulse 0.3s ease-out';
     };
 
+    /**
+     * Generate and Print Test Sheet
+     */
+    const printSheet = () => {
+        const html = generateTestSheet();
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(html);
+        printWindow.document.close();
+        
+        // Give some time for images (QR) to load before printing
+        printWindow.onload = () => {
+            printWindow.print();
+        };
+    };
+
     // Event Listeners
     btnStart.addEventListener('click', startApp);
     btnStop.addEventListener('click', stopApp);
+    const btnPrint = document.getElementById('btn-print');
+    if (btnPrint) btnPrint.addEventListener('click', printSheet);
 });
 
 // Add pulse animation to CSS dynamically or via style.css
