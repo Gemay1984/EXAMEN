@@ -48,6 +48,9 @@ function generateTestSheet() {
                     background: white;
                     position: relative;
                     overflow: hidden;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
                     page-break-inside: avoid;
                     break-inside: avoid;
                     page-break-before: avoid;
@@ -83,38 +86,49 @@ function generateTestSheet() {
                 /* QR Code */
                 .qr-container {
                     position: absolute;
-                    top: 25mm;
-                    left: 25mm;
-                    width: 40mm;
-                    height: 40mm;
+                    top: 20mm;
+                    left: 20mm;
+                    width: 35mm;
+                    height: 35mm;
                 }
                 .qr-container img { width: 100%; height: 100%; }
 
                 /* Header */
                 header {
+                    position: absolute;
+                    top: 20mm;
+                    left: 0;
+                    width: 100%;
                     text-align: center;
-                    margin-top: 10mm;
-                    margin-bottom: 25mm;
                     font-family: Arial, sans-serif;
                 }
                 h1 { margin: 0; font-size: 20pt; }
                 p { margin: 2mm 0; color: #666; font-size: 10pt; }
 
+                /* Safe Area (Eliminates risk of page breaks) */
+                .safe-area {
+                    position: absolute;
+                    top: 80mm;
+                    left: 20mm;
+                    width: 175.9mm;
+                    height: 170mm;
+                    overflow: hidden;
+                }
+
                 /* Questions Container */
                 .questions {
-                    max-height: 200mm;
-                    width: 140mm;
-                    margin: 0 auto;
+                    width: 100%;
+                    height: 100%;
                     border: 2mm solid black;
-                    padding: 8mm;
-                    overflow: hidden;
+                    padding: 6mm;
+                    box-sizing: border-box;
                 }
 
                 .question-row {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    margin-bottom: 5mm;
+                    margin-bottom: 4mm;
                 }
                 .q-num {
                     font-weight: bold;
@@ -128,9 +142,9 @@ function generateTestSheet() {
                     gap: 1mm;
                 }
                 .bubble {
-                    width: 6mm;
-                    height: 6mm;
-                    border: 0.5mm solid black;
+                    width: 5.5mm;
+                    height: 5.5mm;
+                    border: 0.4mm solid black;
                     border-radius: 50%;
                 }
                 .bubble-label {
@@ -157,8 +171,10 @@ function generateTestSheet() {
                     <p>ZipCastellano v2.1 - Validación de Visión</p>
                 </header>
 
-                <div class="questions">
-                    ${questionsHtml}
+                <div class="safe-area">
+                    <div class="questions">
+                        ${questionsHtml}
+                    </div>
                 </div>
             </div>
         </body>
