@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('hidden-canvas');
     const btnStart = document.getElementById('btn-start');
     const btnStop = document.getElementById('btn-stop');
+    const btnReset = document.getElementById('btn-reset');
+    const btnPrint = document.getElementById('btn-print');
     const statusText = document.getElementById('status-text');
     const statusBadge = document.getElementById('status-indicator');
     const resultContainer = document.getElementById('result-container');
@@ -14,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let scanner = null;
     let stream = null;
+    let currentQR = null;
 
     /**
      * Update UI Status
@@ -30,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             setStatus('searching', 'Solicitando cámara...');
             
-            // Camera Constraints
             const constraints = {
                 video: {
                     facingMode: 'environment',
@@ -43,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
             stream = await navigator.mediaDevices.getUserMedia(constraints);
             video.srcObject = stream;
             
-            // Initialize Scanner
             if (!scanner) {
                 scanner = new Scanner(video, canvas);
                 scanner.onQRDetected((data) => {
@@ -51,19 +52,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
 
+            scanner.resetLock();
             scanner.start();
 
             // UI Adjustments
             btnStart.style.display = 'none';
             btnStop.style.display = 'block';
+            btnReset.style.display = 'none';
+            resultContainer.style.display = 'none';
+            currentQR = null;
             setStatus('searching', 'Buscando hoja...');
             
         } catch (err) {
             console.error("App Error:", err);
             let message = "Error al acceder a la cámara";
             if (err.name === 'NotAllowedError') message = "Sin acceso a cámara (Permiso denegado)";
-            if (err.name === 'NotFoundError') message = "No se encontró cámara";
-            
             setStatus('error', message);
         }
     };
@@ -80,21 +83,38 @@ document.addEventListener('DOMContentLoaded', () => {
         video.srcObject = null;
         btnStart.style.display = 'block';
         btnStop.style.display = 'none';
+        btnReset.style.display = 'none';
         setStatus('idle', 'Cámara no iniciada');
         resultContainer.style.display = 'none';
+    };
+
+    /**
+     * Reset Scanner Lock for a new reading
+     */
+    const resetScanner = () => {
+        if (scanner) scanner.resetLock();
+        currentQR = null;
+        resultContainer.style.display = 'none';
+        btnReset.style.display = 'none';
+        setStatus('searching', 'Buscando hoja...');
     };
 
     /**
      * Handle Detected QR
      */
     const handleQRDetected = (data) => {
+        // Anti-flicker: Only update if it's a new detection or state
+        if (currentQR === data) return;
+        currentQR = data;
+
         setStatus('detected', 'QR detectado');
         resultContainer.style.display = 'block';
         qrData.innerText = data;
+        btnReset.style.display = 'block';
         
-        // Brief pulse effect on detection
+        // Pulse effect
         resultContainer.style.animation = 'none';
-        resultContainer.offsetHeight; // trigger reflow
+        resultContainer.offsetHeight;
         resultContainer.style.animation = 'pulse 0.3s ease-out';
     };
 
@@ -116,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event Listeners
     btnStart.addEventListener('click', startApp);
     btnStop.addEventListener('click', stopApp);
-    const btnPrint = document.getElementById('btn-print');
+    if (btnReset) btnReset.addEventListener('click', resetScanner);
     if (btnPrint) btnPrint.addEventListener('click', printSheet);
 });
 
