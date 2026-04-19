@@ -28,6 +28,11 @@ function generateTestSheet() {
         <html>
         <head>
             <style>
+                * {
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+
                 @page { 
                     size: letter portrait; 
                     margin: 0; 
@@ -45,7 +50,7 @@ function generateTestSheet() {
                 /* Main Sheet Container */
                 .sheet {
                     width: 215.9mm;
-                    height: 278mm; /* Safe height for Letter */
+                    height: 279.4mm;
                     box-sizing: border-box;
                     padding: 0;
                     background: white;
@@ -69,59 +74,57 @@ function generateTestSheet() {
                     }
                     .sheet, .sheet * {
                         visibility: visible;
-                        -webkit-print-color-adjust: exact;
-                        print-color-adjust: exact;
                     }
                     .sheet {
                         position: absolute;
                         top: 0;
                         left: 0;
                         width: 215.9mm;
-                        height: 278mm;
+                        height: 279.4mm;
                     }
                 }
 
-                /* Anchors */
+                /* Anchors (ZipCastellano v2.1 Robust Markers) */
                 .anchor {
-                    width: 10mm;
-                    height: 10mm;
+                    width: 12mm;
+                    height: 12mm;
                     background: black;
                     position: absolute;
                 }
-                .top-left { top: 5mm; left: 5mm; }
-                .top-right { top: 5mm; right: 5mm; }
-                .bottom-left { bottom: 5mm; left: 5mm; }
-                .bottom-right { bottom: 5mm; right: 5mm; }
+                .top-left { top: 10mm; left: 10mm; }
+                .top-right { top: 10mm; right: 10mm; }
+                .bottom-left { bottom: 10mm; left: 10mm; }
+                .bottom-right { bottom: 10mm; right: 10mm; }
 
                 /* QR Code */
                 .qr-container {
                     position: absolute;
-                    top: 15mm;
-                    left: 15mm;
-                    width: 30mm;
-                    height: 30mm;
+                    top: 20mm;
+                    left: 20mm;
+                    width: 35mm;
+                    height: 35mm;
                 }
                 .qr-container img { width: 100%; height: 100%; }
 
                 /* Header */
                 header {
                     position: absolute;
-                    top: 15mm;
+                    top: 20mm;
                     left: 0;
                     width: 100%;
                     text-align: center;
                     font-family: Arial, sans-serif;
                 }
-                h1 { margin: 0; font-size: 18pt; }
-                p { margin: 1mm 0; color: #666; font-size: 9pt; }
+                h1 { margin: 0; font-size: 20pt; }
+                p { margin: 1mm 0; color: #666; font-size: 10pt; }
 
-                /* Safe Area (Eliminates risk of page breaks) */
+                /* Safe Area (Optimized for real printers) */
                 .safe-area {
                     position: absolute;
-                    top: 60mm;
-                    left: 15mm;
-                    width: 185.9mm;
-                    height: 190mm;
+                    top: 75mm;
+                    left: 20mm;
+                    width: 175.9mm;
+                    height: 180mm;
                     overflow: hidden;
                 }
 
@@ -129,8 +132,8 @@ function generateTestSheet() {
                 .questions {
                     width: 100%;
                     height: 100%;
-                    border: 1.5mm solid black;
-                    padding: 5mm;
+                    border: 2mm solid black;
+                    padding: 6mm;
                     box-sizing: border-box;
                 }
 
@@ -138,11 +141,11 @@ function generateTestSheet() {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    margin-bottom: 3.5mm;
+                    margin-bottom: 4mm;
                 }
                 .q-num {
                     font-weight: bold;
-                    font-size: 11pt;
+                    font-size: 12pt;
                     width: 10mm;
                 }
                 .bubble-container {
@@ -158,7 +161,7 @@ function generateTestSheet() {
                     border-radius: 50%;
                 }
                 .bubble-label {
-                    font-size: 7.5pt;
+                    font-size: 8pt;
                     font-weight: bold;
                 }
             </style>
