@@ -16,10 +16,15 @@ class Scanner {
         this.qrCallback = null;
         this.maxRes = 1280;
 
-        // Stability & Locking (ZipCastellano v2.1 Professional Pipeline)
-        this.qrBuffer = [];
+        // Production Stability Pipeline (Traffic Light System)
+        this.qrCandidate = null;
+        this.qrCount = 0;
         this.qrLock = false;
+        this.qrLastSeen = 0;
         this.lastQRBox = null;
+
+        this.STABLE_THRESHOLD = 4; // Frames to confirm
+        this.LOST_TIMEOUT = 800;   // ms to wait before losing candidate
     }
 
     /**
@@ -35,7 +40,9 @@ class Scanner {
      */
     resetLock() {
         this.qrLock = false;
-        this.qrBuffer = [];
+        this.qrCandidate = null;
+        this.qrCount = 0;
+        this.qrLastSeen = 0;
         this.lastQRBox = null;
     }
 
@@ -82,9 +89,9 @@ class Scanner {
      * Capture frame, scale, and scan for QR
      */
     processFrame() {
-        // If locked, we don't process further (Freeze Visual)
         if (this.qrLock) return;
 
+        const now = Date.now();
         const { videoWidth, videoHeight } = this.video;
         
         let scale = 1;
@@ -109,27 +116,29 @@ class Scanner {
             });
 
             if (code) {
-                // Add to stability buffer
-                this.qrBuffer.push(code.data);
-                if (this.qrBuffer.length > 5) {
-                    this.qrBuffer.shift();
+                // Stabilize candidate
+                if (this.qrCandidate === code.data) {
+                    this.qrCount++;
+                } else {
+                    this.qrCandidate = code.data;
+                    this.qrCount = 1;
                 }
 
-                // Check stability
-                const isStable = this.qrBuffer.length === 5 && 
-                                 this.qrBuffer.every(val => val === code.data);
+                this.qrLastSeen = now;
 
-                if (isStable && !this.qrLock) {
+                // Confirm detection
+                if (this.qrCount >= this.STABLE_THRESHOLD && !this.qrLock) {
                     this.qrLock = true;
-                    this.lastQRBox = code.location; // Save for Phase 2
+                    this.lastQRBox = code.location;
                     if (this.qrCallback) {
                         this.qrCallback(code.data);
                     }
                 }
             } else {
-                // Clear buffer if QR disappears (only if not locked)
-                if (!this.qrLock) {
-                    this.qrBuffer = [];
+                // Graceful loss: Don't reset immediately to prevent flickering
+                if (!this.qrLock && (now - this.qrLastSeen > this.LOST_TIMEOUT)) {
+                    this.qrCandidate = null;
+                    this.qrCount = 0;
                 }
             }
         } catch (err) {

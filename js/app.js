@@ -103,11 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
      * Handle Detected QR
      */
     const handleQRDetected = (data) => {
-        // Anti-flicker: Only update if it's a new detection or state
         if (currentQR === data) return;
         currentQR = data;
 
-        setStatus('detected', 'QR detectado');
+        setStatus('detected', 'QR detectado ✓ (estable)');
         resultContainer.style.display = 'block';
         qrData.innerText = data;
         btnReset.style.display = 'block';
