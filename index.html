@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZipCastellano v2.1 - Fase 1</title>
     <link rel="stylesheet" href="css/style.css">
-    <!-- jsQR Library -->
+    <!-- jsQR & OpenCV.js -->
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script async src="https://docs.opencv.org/4.5.4/opencv.js" onload="console.log('OpenCV.js Loaded')"></script>
 </head>
 <body>
     <div class="app-container">
@@ -27,6 +28,11 @@
                 <div id="status-indicator" class="status-badge">
                     <span class="status-dot"></span>
                     <span id="status-text">Cámara no iniciada</span>
+                </div>
+
+                <div class="mini-preview-container">
+                    <canvas id="warp-preview"></canvas>
+                    <span>Hoja Corregida</span>
                 </div>
             </div>
 
