@@ -28,7 +28,7 @@ function generateTestSheet() {
         <html>
         <head>
             <style>
-                @page { size: A4; margin: 0; }
+                @page { size: letter; margin: 0; }
                 body { 
                     margin: 0; 
                     padding: 0; 
@@ -37,10 +37,10 @@ function generateTestSheet() {
                     color: black;
                 }
                 .sheet-container {
-                    width: 210mm;
-                    height: 297mm;
+                    width: 215.9mm;
+                    height: 279.4mm;
                     position: relative;
-                    padding: 20mm;
+                    padding: 15mm;
                     box-sizing: border-box;
                 }
                 
@@ -70,8 +70,8 @@ function generateTestSheet() {
                 /* Header */
                 header {
                     text-align: center;
-                    margin-top: 15mm;
-                    margin-bottom: 50mm;
+                    margin-top: 10mm;
+                    margin-bottom: 35mm;
                 }
                 h1 { margin: 0; font-size: 24pt; }
                 p { margin: 5px 0; color: #666; }
